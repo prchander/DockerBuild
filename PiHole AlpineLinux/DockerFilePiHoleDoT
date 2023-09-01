@@ -1,0 +1,22 @@
+FROM alpine:latest
+
+RUN apk add --no-cache \
+    unbound \
+    dnsmasq \
+    dhcpcd \
+    curl \
+    jq
+
+RUN curl -sSL https://install.pi-hole.net | bash
+
+RUN sed -i 's/DNS_SERVER=127.0.0.1/DNS_SERVER=192.168.1.1/g' /etc/pihole/pihole-FTL.conf
+
+RUN sed -i 's/DNS_PORT=53/DNS_PORT=5353/g' /etc/pihole/pihole-FTL.conf
+
+RUN sed -i 's/DNS_DOMAIN=localhost/DNS_DOMAIN=pihole.lan/g' /etc/pihole/pihole-FTL.conf
+
+RUN echo "nameserver 192.168.1.1" >> /etc/resolv.conf
+
+EXPOSE 53/udp
+
+CMD ["/usr/sbin/pihole-FTL"]
