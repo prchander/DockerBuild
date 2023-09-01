@@ -1,0 +1,17 @@
+FROM archlinux
+
+RUN pacman -S --noconfirm \
+    unbound \
+    dnsmasq \
+    dhcpcd \
+    pfsense-support \
+    pihole
+
+RUN mkdir -p /etc/pihole
+
+COPY pihole-FTL /etc/pihole
+
+EXPOSE 53/tcp
+EXPOSE 53/udp
+
+CMD ["/usr/sbin/pihole-FTL"]
