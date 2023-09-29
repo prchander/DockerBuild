@@ -1,0 +1,27 @@
+FROM ubuntu:latest
+
+RUN apt-get update && apt-get install -y \
+astyle \
+cmake \
+gcc \
+ninja-build \
+libssl-dev \
+python3-pytest \
+python3-pytest-xdist \
+unzip \
+xsltproc \
+doxygen \
+graphviz \
+python3-yaml \
+python3-pip \
+git \
+valgrind
+
+RUN git clone -b main https://github.com/open-quantum-safe/liboqs.git
+
+WORKDIR /liboqs
+
+RUN mkdir build && cd build 
+
+RUN cmake -DBUILD_SHARED_LIBS=ON -GNinja ..
+RUN ninja install
